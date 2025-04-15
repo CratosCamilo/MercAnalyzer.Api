@@ -1,4 +1,4 @@
-import { ER_MESSAGES, SECURITY_HASH } from "@/constants/constants";
+import { ER_MESSAGES } from "@/constants/constants";
 import { serverError, success, unauthorized } from "@/helpers/response";
 import { generateTokens } from "@/helpers/token";
 import { UserRepository } from "@/lib/repositories/UserRepository";
@@ -20,8 +20,7 @@ export async function POST(req: Request) {
         if (!user) return unauthorized(ER_MESSAGES.INVALID_CREDENTIALS);
 
         // Validate password.
-        const hashedPassword = await bcrypt.hash(password, SECURITY_HASH);
-        const isMatch = await bcrypt.compare(hashedPassword, user.CONTRASENA_HASH);
+        const isMatch = await bcrypt.compare(password, user.CONTRASENA_HASH);
         if (!isMatch) return unauthorized(ER_MESSAGES.INVALID_CREDENTIALS);
 
         const userProps: UserProps = {

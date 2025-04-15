@@ -8,14 +8,18 @@ export function getUserSession(req: Request) {
         return forbidden();
     }
 
+    return getUserFromPayload(userHeader);
+};
+
+export function getUserFromPayload(payload: string) {
     try {
-        const user = JSON.parse(userHeader) as UserProps;
+        const user = JSON.parse(payload) as UserProps;
         if (!user?.userId || !user?.email) return forbidden();
 
         return user;
     }
     catch (error) {
-        console.error('Error parsing x-user header: ', error);
+        console.error('Error parsing payload into user: ', error);
         return forbidden();
     }
 };

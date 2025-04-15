@@ -8,6 +8,7 @@ export const ER_MESSAGES = {
     EMAIL_EXISTS: 'El correo ya está registrado.',
     USER_NOT_EXISTS: 'El usuario no existe.',
     SCRAPER_ERROR: 'Ha ocurrido un error al intentar realizar la búsqueda.',
+    NOT_FOUND_JWT_KEYS: 'JWT_SECRET, JWT_REFRESH_SECRET JWT_EXPIRATION y JWT_REFRESH_EXPIRATION deben estar definidos en el .env'
 };
 
 export const SECURITY_HASH = 10;

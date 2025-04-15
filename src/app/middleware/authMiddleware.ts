@@ -22,13 +22,6 @@ export function authMiddleware(req: Request) {
             return NextResponse.next({ request: { headers: requestHeaders } });
         }
 
-        const accessRefresh = validateToken(refreshToken, process.env.JWT_REFRESH_SECRET as string);
-
-        if (!accessRefresh.expired) {
-            requestHeaders.set('x-user', JSON.stringify(accessRefresh.payload));
-            return NextResponse.next({ request: { headers: requestHeaders } });
-        }
-
         return unauthorized();
     }
     catch (error) {

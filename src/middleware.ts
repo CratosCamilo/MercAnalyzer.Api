@@ -1,9 +1,12 @@
 // middleware.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { corsMiddleware } from './middleware/corsMiddleware';
 
-export function middleware(req: NextRequest) {
+export function middleware() {
   let res = NextResponse.next();
-  res = corsMiddleware(req, res);
+
+  // Cors.
+  res = corsMiddleware(res);
+
   return res;
 }

@@ -4,11 +4,11 @@ import { connectToDB } from "../db";
 
 export class UserRepository {
 
-    static async findById(userId: number): Promise<UserRecord | null> {
+    static async findById(userId: string): Promise<UserRecord | null> {
         const db = await connectToDB();
         const result = await db
             .request()
-            .input('ID_USUARIO', sql.Numeric, userId)
+            .input('ID_USUARIO', sql.UniqueIdentifier, userId)
             .query(`
                 SELECT
                     ID_USUARIO, CORREO, CONTRASENA_HASH 

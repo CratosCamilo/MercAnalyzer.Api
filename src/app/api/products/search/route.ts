@@ -1,16 +1,16 @@
-import { authMiddleware } from "@/app/middleware/authMiddleware";
 import { ER_MESSAGES } from "@/constants/constants";
 import { badRequest, serverError, success } from "@/helpers/response";
 import { getUserSession } from "@/helpers/session";
 import { HistoryRepository } from "@/lib/repositories/HistoryRepository";
 import { UserRepository } from "@/lib/repositories/UserRepository";
-import { ScraperService } from "@/lib/services/scraperService";
+import { ScraperService } from "@/lib/services/ml-scraper/scraperService";
+import { authMiddleware } from "@/middleware/authMiddleware";
 import { SearchProps, UserProps } from "@/types/props";
 import { validateSearch } from "@/validators/validateSearch";
 
 export async function POST(req: Request) {
-    const middlewareResponse = authMiddleware(req);
-    if (middlewareResponse instanceof Response) return middlewareResponse;
+    const authResponse = authMiddleware(req);
+    if (authResponse instanceof Response) return authResponse;
 
     const userOrResponse = getUserSession(req);
     if (userOrResponse instanceof Response) return userOrResponse;

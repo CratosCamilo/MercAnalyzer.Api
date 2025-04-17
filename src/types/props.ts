@@ -1,5 +1,5 @@
 export interface UserProps {
-    userId: number;
+    userId: string;
     email: string;
     password: string;
 }
@@ -13,3 +13,11 @@ export interface RegisterUserProps extends Pick<UserProps, 'email' | 'password'>
 export interface SearchProps {
     filter: string;
 }
+
+export interface ScraperServiceResponse {
+    nombre: string,
+    precio: string,
+    imagen: string,
+    descripcion: string,
+    link: string
+};

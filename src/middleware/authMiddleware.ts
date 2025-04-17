@@ -1,31 +1,22 @@
-import { isEmptyStrings } from "@/helpers/regex";
-import { forbidden, unauthorized } from "@/helpers/response";
+import { serverError, unauthorized } from "@/helpers/response";
 import { validateToken } from "@/helpers/token";
-import { NextResponse } from "next/server";
 
 export function authMiddleware(req: Request) {
-    const authHeader = req.headers.get('authorization') as string;
-    const refreshToken = req.headers.get('x-refresh-token') as string;
-
-    if (isEmptyStrings([authHeader, refreshToken])) {
-        return forbidden();
-    }
-
-    const requestHeaders = new Headers(req.headers);
-
     try {
+        const authHeader = req.headers.get('Authorization') as string;
+        if (!authHeader) return unauthorized();
+
+        const containsBearer = authHeader.includes('Bearer');
+        if (!containsBearer) return unauthorized();
+
         const token = authHeader.split(' ')[1];
-        const accessToken = validateToken(token, process.env.JWT_SECRET as string);
+        const { expired, payload } = validateToken(token, process.env.JWT_SECRET as string);
+        if (expired) return unauthorized();
 
-        if (!accessToken.expired) {
-            requestHeaders.set('x-user', JSON.stringify(accessToken.payload));
-            return NextResponse.next({ request: { headers: requestHeaders } });
-        }
-
-        return unauthorized();
+        req.headers.set('x-user', JSON.stringify(payload));
     }
     catch (error) {
         console.error('Error validating token: ', error);
-        return forbidden();
+        return serverError();
     }
 };

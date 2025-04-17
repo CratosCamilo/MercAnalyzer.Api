@@ -11,5 +11,5 @@ export function isValidPassword(password: string): boolean {
 }
 
 export function isEmptyStrings(strings: string[]): boolean {
-    return strings.some(str => !str && str.trim() === '');
+    return strings.some(str => !str || str.trim() === '');
 };

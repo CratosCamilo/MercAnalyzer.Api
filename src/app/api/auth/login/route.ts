@@ -1,5 +1,6 @@
 import { ER_MESSAGES } from "@/constants/constants";
-import { badRequest, serverError, success } from "@/helpers/response";
+import { errorHandler } from "@/helpers/errorHandler";
+import { badRequest, success } from "@/helpers/response";
 import { generateTokens } from "@/helpers/token";
 import { UserRepository } from "@/lib/repositories/UserRepository";
 import { LoginUserProps, UserProps } from "@/types/props";
@@ -7,12 +8,12 @@ import { validateLogin } from "@/validators/validateLogin";
 import bcrypt from 'bcrypt';
 
 export async function POST(req: Request) {
-    const data: LoginUserProps = await req.json();
-
-    const validatorResponse = validateLogin(data);
-    if (validatorResponse instanceof Response) return validatorResponse;
-
     try {
+        const data: LoginUserProps = await req.json();
+
+        const validatorResponse = validateLogin(data);
+        if (validatorResponse instanceof Response) return validatorResponse;
+
         const { email, password } = data;
 
         // Find user by email.
@@ -34,7 +35,6 @@ export async function POST(req: Request) {
         return success({ token, refreshToken });
     }
     catch (error) {
-        console.error('Error login endpoint: ', error);
-        return serverError();
+        errorHandler(req, error);
     }
 };

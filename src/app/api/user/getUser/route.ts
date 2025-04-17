@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         const existsUser = UserRepository.findById(userId);
         if (!existsUser) return badRequest(ER_MESSAGES.USER_NOT_EXISTS);
 
-        return success({ userId, email });
+        return success({ email });
     }
     catch (error) {
         errorHandler(req, error);

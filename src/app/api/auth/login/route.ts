@@ -1,5 +1,5 @@
 import { ER_MESSAGES } from "@/constants/constants";
-import { serverError, success, unauthorized } from "@/helpers/response";
+import { badRequest, serverError, success } from "@/helpers/response";
 import { generateTokens } from "@/helpers/token";
 import { UserRepository } from "@/lib/repositories/UserRepository";
 import { LoginUserProps, UserProps } from "@/types/props";
@@ -17,11 +17,11 @@ export async function POST(req: Request) {
 
         // Find user by email.
         const user = await UserRepository.findByEmail(email);
-        if (!user) return unauthorized(ER_MESSAGES.INVALID_CREDENTIALS);
+        if (!user) return badRequest(ER_MESSAGES.INVALID_CREDENTIALS);
 
         // Validate password.
         const isMatch = await bcrypt.compare(password, user.CONTRASENA_HASH);
-        if (!isMatch) return unauthorized(ER_MESSAGES.INVALID_CREDENTIALS);
+        if (!isMatch) return badRequest(ER_MESSAGES.INVALID_CREDENTIALS);
 
         const userProps: UserProps = {
             userId: user.ID_USUARIO,
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
         // Create JWT.
         const { token, refreshToken } = generateTokens(userProps);
-        return success({ Token: token, RefreshToken: refreshToken });
+        return success({ token, refreshToken });
     }
     catch (error) {
         console.error('Error login endpoint: ', error);

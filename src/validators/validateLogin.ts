@@ -5,10 +5,8 @@ import { LoginUserProps } from "@/types/props";
 
 export function validateLogin({ email, password }: LoginUserProps) {
     // Empty fields validation.
-    if (isEmptyStrings([email, password]))
-        return badRequest(ER_MESSAGES.REQUIRED_FIELDS);
+    if (isEmptyStrings([email, password])) return badRequest(ER_MESSAGES.REQUIRED_FIELDS);
 
     // Email validation.
-    if (!isValidEmail(email))
-        return badRequest(ER_MESSAGES.INVALID_EMAIL);
+    if (!isValidEmail(email)) return badRequest(ER_MESSAGES.INVALID_EMAIL);
 }
